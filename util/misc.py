@@ -20,11 +20,21 @@ from torch import Tensor
 import torchvision
 if float(torchvision.__version__[:3]) < 0.7:
     # from torchvision.ops import _new_empty_tensor
-    from torchvision.ops.misc import _output_size
+    # from torchvision.ops.misc import _output_size
 
 def _new_empty_tensor(input, shape):
     return torch.empty(shape, dtype=input.dtype, device=input.device)
-
+    
+def _output_size(dim: int, input: torch.Tensor, size: Optional[List[int]], scale_factor: Optional[float]):
+    """
+    计算插值输出的空间尺寸（高、宽），根据 size 或 scale_factor。
+    """
+    if size is not None:
+        return size
+    else:
+        assert scale_factor is not None, "size or scale_factor must be defined"
+        return [int(input.shape[i + 2] * scale_factor) for i in range(dim)]
+        
 class SmoothedValue(object):
     """Track a series of values and provide access to smoothed values over a
     window or the global series average.
