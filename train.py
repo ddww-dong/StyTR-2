@@ -132,9 +132,12 @@ style_iter = iter(data.DataLoader(
  
 
 optimizer = torch.optim.Adam([ 
-                              {'params': network.module.transformer.parameters()},
-                              {'params': network.module.decode.parameters()},
-                              {'params': network.module.embedding.parameters()},        
+                              # {'params': network.module.transformer.parameters()},
+                              # {'params': network.module.decode.parameters()},
+                              # {'params': network.module.embedding.parameters()},     
+                              {'params': network.transformer.parameters()},
+                              {'params': network.decode.parameters()},
+                              {'params': network.embedding.parameters()},     
                               ], lr=args.lr)
 
 
@@ -183,7 +186,9 @@ for i in tqdm(range(args.max_iter)):
     writer.add_scalar('total_loss', loss.sum().item(), i + 1)
 
     if (i + 1) % args.save_model_interval == 0 or (i + 1) == args.max_iter:
-        state_dict = network.module.transformer.state_dict()
+        # state_dict = network.module.transformer.state_dict()
+        state_dict = network.transformer.state_dict()
+        # 
         for key in state_dict.keys():
             state_dict[key] = state_dict[key].to(torch.device('cpu'))
         torch.save(state_dict,
