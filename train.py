@@ -195,13 +195,17 @@ for i in tqdm(range(args.max_iter)):
                    '{:s}/transformer_iter_{:d}.pth'.format(args.save_dir,
                                                            i + 1))
 
-        state_dict = network.module.decode.state_dict()
+        # state_dict = network.module.decode.state_dict()
+        state_dict = network.transformer.state_dict()
+        
         for key in state_dict.keys():
             state_dict[key] = state_dict[key].to(torch.device('cpu'))
         torch.save(state_dict,
                    '{:s}/decoder_iter_{:d}.pth'.format(args.save_dir,
                                                            i + 1))
-        state_dict = network.module.embedding.state_dict()
+        # state_dict = network.module.embedding.state_dict()
+        state_dict = network.transformer.state_dict()
+        
         for key in state_dict.keys():
             state_dict[key] = state_dict[key].to(torch.device('cpu'))
         torch.save(state_dict,
